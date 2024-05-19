@@ -1,5 +1,6 @@
 const User = require('../../Models/Users');
 const SubUser = require('../../Models/SubUsers');
+const path = require('path');
 
 // Function to create a new user record
 const addProfilePic = async (req) => {
@@ -52,8 +53,28 @@ const getSubUser = async (req) => {
   }
 };
 
+const getProfilePic = async (req) => {
+  const { clientId, username } = req.params
+  console.log({clientId, username})
+  try {
+    const user = await SubUser.findOne({ clientId, username });
+    // console.log({user})
+    if (user) {
+      return { success: true, message: user.image };
+    } else {
+      return { success: false, message: 'User not found' };
+    }
+    
+    // return { success: true, message: user };
+  } catch (error) {
+    // throw error
+    return { success: false, message: error };
+  }
+};
+
 module.exports = {
   addProfilePic,
   getAllSubUsers,
-  getSubUser
+  getSubUser,
+  getProfilePic
 };

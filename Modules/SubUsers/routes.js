@@ -32,4 +32,15 @@ router.post('/:clientId/:username', async (req, res) => {
   res.status((response.success === true) ? 201 : 500).json(response);
 });
 
+router.get('/image/:clientId/:username', async (req, res) => {
+  const response = await subUserService.getProfilePic(req);  
+  // console.log({path: response.message})
+  if (response.success === true) {
+    const imagePath = path.join(__dirname, '../../uploads', 'profile_pics', response.message);
+    res.sendFile(imagePath) 
+  } else {
+    res.status(201).json(response);
+  }
+});
+
 module.exports = router;
