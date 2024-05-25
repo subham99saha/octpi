@@ -10,7 +10,7 @@ const addProfilePic = async (req) => {
       const existingSubUser = await SubUser.findOne({ clientId: req.body.clientId, username: req.body.username });
       if (existingSubUser) {
         // return { success: false, message: 'Client already exists' };
-        let response = await SubUser.updateOne({ username: req.body.username }, { image: req.file.filename })
+        let response = await SubUser.updateOne({ clientId: req.body.clientId, username: req.body.username }, { image: req.file.filename })
         if (response) {
           return { success: true, message: 'Profile pic updated', result: response }
         } else {
