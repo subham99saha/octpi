@@ -40,4 +40,22 @@ router.get('/check-amount/:clientId', async (req, res) => {
   res.status(200).json(response);
 });
 
+router.get('/check-pay-eligiblity/:clientId', async (req, res) => {
+  const { clientId } = req.params;
+  const response = await usersService.checkPayEligibility(clientId);
+  res.status(200).json(response);
+});
+
+router.get('/set-pay-eligiblity/:clientId', async (req, res) => {
+  const { clientId } = req.params;
+  const response = await usersService.setPayEligibility(clientId);
+  res.status(200).json(response);
+});
+
+router.get('/update-values/:clientId/:rptCust/:rptBuss', async (req, res) => {
+  const { clientId, rptCust, rptBuss } = req.params;
+  const response = await usersService.updateValues(clientId,rptCust,rptBuss);
+  res.status(200).json(response);
+});
+
 module.exports = router;

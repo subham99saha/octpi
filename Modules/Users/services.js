@@ -77,10 +77,62 @@ const checkAmount = async (clientId) => {
       return { success: false, message: 'Client doesn\'t exist' }
     }
   } catch (error) {
-    return { success: false, message: 'Amount Due' }
+    return { success: false, message: 'Something went wrong', error }
   }
 };
 
+const checkPayEligibility = async (clientId) => {
+  try {
+    const check = await User.findOne({ clientId });
+    if (check) {
+      if (check.payEligibility != undefined) {
+        return { success: true, message: '', payEligibility: check.payEligibility, result: check };
+      } else {
+        return { success: true, message: 'Pay eligibility not found', result: check }
+      }
+    } else {
+      return { success: false, message: 'Client doesn\'t exist' }
+    }
+  } catch (error) {
+    // throw error;
+    return { success: false, message: 'Something went wrong', error }
+  }
+};
+
+const setPayEligibility = async (clientId) => {
+  try {
+    const check = await User.findOne({ clientId });
+    if (check) {
+      let payEligibility = true
+      if (check.payEligibility) {
+        payEligibility = !check.payEligibility
+      }
+      let response = await User.updateOne({ clientId }, { payEligibility } )
+      if (response) {
+        return { success: true, message: 'Eligibility updated', result: response }
+      } else {
+        return { success: false, message: 'Internal Server Error' };
+      }
+    } else {
+      return { success: false, message: 'Client doesn\'t exist' }
+    }
+  } catch (error) {
+    return { success: false, message: 'Something went wrong', error }
+  }
+};
+
+const updateValues = async (clientId,rptCust,rptBuss) => {
+  try {
+    let response = await User.updateOne({ clientId }, { $inc: { numberOfRepeatCustomers: rptCust, amountOfRepeatBusiness: rptBuss } })
+      if (response) {
+        return { success: true, message: 'values updated', result: response }
+      } else {
+        return { success: false, message: 'Internal Server Error' };
+      }
+  } catch (error) {
+    return { success: false, message: 'Something went wrong', error }
+  }
+};
 const getAllUsers = async () => {
   try {
     const users = await User.find();
@@ -96,5 +148,8 @@ module.exports = {
   deleteUser,
   addAmount,
   checkAmount,
+  checkPayEligibility,
+  setPayEligibility,
+  updateValues,
   getAllUsers,
 };

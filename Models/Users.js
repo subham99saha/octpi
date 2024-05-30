@@ -14,6 +14,18 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: 0
   },
+  payEligibility: {
+    type: Boolean,
+    default: true
+  },
+  numberOfRepeatCustomers: {
+    type: Number,
+    default: 0
+  },
+  amountOfRepeatBusiness: {
+    type: Number,
+    default: 0
+  },
   createdOn: {
     type: Date,
     default: Date.now,
